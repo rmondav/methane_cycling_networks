@@ -1,2 +1,6 @@
 # methanotrophy_networks
-observing environmental and mixed-culture samples for correlations to CH4 cycle
+scripts associated with the preview manuscript:
+
+and the article:
+
+aim: describe environmental and mixed-culture microbial community correlations to CH4 cycle
