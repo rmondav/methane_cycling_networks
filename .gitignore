@@ -1,5 +1,6 @@
 ## folders
 original_tables/
+processed_tables/
 
 ## mothur files
 cultALL.trim.contigs.good.unique.good.filter.unique.precluster.pick.pick.agc.*
