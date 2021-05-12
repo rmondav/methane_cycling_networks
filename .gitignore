@@ -3,6 +3,7 @@ original_tables/
 
 ## mothur files
 cultALL.trim.contigs.good.unique.good.filter.unique.precluster.pick.pick.agc.*
+mothur.*.logfile
 
 ## qiime files
 
