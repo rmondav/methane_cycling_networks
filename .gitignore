@@ -1,11 +1,16 @@
-# History files
+## folders
+original_tables/
+
+## mothur files
+cultALL.trim.contigs.good.unique.good.filter.unique.precluster.pick.pick.agc.*
+
+## qiime files
+
+
+# R files
 .Rhistory
 .Rapp.history
-
-# Session Data files
 .RData
-
-# User-specific files
 .Ruserdata
 
 # Example code in package build process
