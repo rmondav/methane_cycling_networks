@@ -227,6 +227,11 @@ biom summarize-table -i OTU_table_O2_lake_cultures_2000.ovr20count.biom >summary
 biom summarize-table -i OTU_table_TS_lake_17000.ovr170count.biom >summary_TS_lake_17000.ovr170count.txt
 
 #good enough to start with for graphing can change later depending on what story people are interested in, or do taxa summary with original subsampled tables
+summarize_taxa.py -i OTU_table_TS_lake_17000.ovr170count.biom -o ../taxonomy_summary/TS_lake
+summarize_taxa.py -i OTU_table_O2_lake_cultures_2000.ovr20count.biom -o ../taxonomy_summary/MC_O2_lake
+summarize_taxa.py -i OTU_table_anO2_pond_cultures_2000.ovr20count.biom -o ../taxonomy_summary/MC_anO2_pond
+summarize_taxa.py -i OTU_table_anO2_lake_cultures_2000.ovr20count.biom -o ../taxonomy_summary/MC_anO2_lake
+
 ```
 
 
