@@ -67,7 +67,7 @@ remove.groups(shared=processed_tables/methanotrophy_OTU_table.txt, groups=Anaero
 # convert to biom format
 make.biom(shared=processed_tables/methanotrophy_OTU_table.0.03.pick.txt)
 quit()
-#output methanotrophy_OTU_table_wo_uknowns.biom
+#output methanotrophy_OTU_table.0.03.pick.0.03.biom
 ```
 
 # separate sample types, remove failed samples and ultra-rare OTUs, then subsample
@@ -137,4 +137,96 @@ git status
 git add ./scripts/ #(etc)
 git commit -m "add sample lists"
 git push origin main
+
+
+```{bash}
+
+cd /proj/snic2020-16-196/nobackup/CHtrophy_network_nobackup/methanotrophy_networks/processed_tables
+interactive -n 1 -t 02:10:00 -A snic2020-5-529
+module load bioinfo-tools Qiime/1.9.1 git/2.28.0
+
+# summarise
+biom summarize-table -i OTU_table_anO2_lake_cultures.biom >summary_anO2_lake_cultures.txt #167 S
+biom summarize-table -i OTU_table_O2_lake_cultures.biom >summary_O2_lake_cultures.txt #101 s
+biom summarize-table -i OTU_table_anO2_pond_cultures.biom >summary_anO2_pond_cultures.txt #96 s
+biom summarize-table -i OTU_table_TS_lake.biom >summary_TS_lake.txt #35 s
+
+## subsample 600 counts NTC
+single_rarefaction.py \
+-i methanotrophy_OTU_table_filtrate_NTC.biom -o OTU_table_filtrate_NTC.600.biom --depth 600
+biom summarize-table -i OTU_table_filtrate_NTC.600.biom >summary_NTC.600.txt
+biom summarize-table -i OTU_table_filtrate_NTC.600.biom --qualitative >summary_NTC.600.qual.txt
+filter_otus_from_otu_table.py \
+-i OTU_table_filtrate_NTC.600.biom -o OTU_table_filtrate_NTC.600.no_singletons.biom -n 2
+biom summarize-table -i OTU_table_filtrate_NTC.600.no_singletons.biom >summary_NTC.600.ns.txt
+biom summarize-table -i OTU_table_filtrate_NTC.600.no_singletons.biom --qualitative >summary_NTC.600.ns.qual.txt
+
+## subsample 2000 counts cultures
+single_rarefaction.py \
+-i OTU_table_anO2_lake_cultures.biom -o OTU_table_anO2_lake_cultures_2000.biom --depth 2000
+biom summarize-table -i OTU_table_anO2_lake_cultures_2000.biom >summary_anO2_lake_cultures_2000.txt #163 samples
+
+single_rarefaction.py \
+-i OTU_table_anO2_pond_cultures.biom -o OTU_table_anO2_pond_cultures_2000.biom --depth 2000
+biom summarize-table -i OTU_table_anO2_pond_cultures_2000.biom >summary_anO2_pond_cultures_2000.txt #95 samples
+
+single_rarefaction.py \
+-i OTU_table_O2_lake_cultures.biom -o OTU_table_O2_lake_cultures_2000.biom --depth 2000
+biom summarize-table -i OTU_table_O2_lake_cultures_2000.biom >summary_O2_lake_cultures_2000.txt #101 samples
+
+## subsample at 10 000 count TS lake cultures
+single_rarefaction.py \
+-i OTU_table_TS_lake.biom -o OTU_table_TS_lake_17000.biom --depth 17000
+biom summarize-table -i OTU_table_TS_lake_17000.biom >summary_TS_lake_cultures_17000.txt #35 samples
+## subsample same as cultures->useful if we want to ask if subsamples are same as random sampling or result of reduced assemblage culturing. but as we can only ask this of some cultures tehn not particularly useful unless we decide to do a separate MS on only tose culutres
+single_rarefaction.py \
+-i OTU_table_TS_lake.biom -o OTU_table_TS_lake_2000.biom --depth 2000
+biom summarize-table -i OTU_table_TS_lake_2000.biom >summary_TS_lake_cultures_2000.txt
+
+## for network calculations
+# try out several options to find something that reduces sparcity to around 50% without removing all the richness/diversity
+--min_samples 30% # reduced the cultures too drastically. not good option for cultures as they all had different starting assemblages
+--min_samples 10 # slightly better option and based on the idea that 10 samples could give sufficient co-occurance patterns for strong stats
+--min_count_fraction 0.1 #retains OTUs with >10% r.a. overall, not good, only dominant OTUs
+--min_count_fraction 0.01 #retains OTUs with >1% overal r..a. ok for natural assemblages (lake) and the aerobic cultures but not good option for anO2 cultures
+# try combination of >10% of samples  and count (1% one sample + 1x10%) for anO2 cultures and >106 (1% one sample +) for O2 cultures
+filter_otus_from_otu_table.py -i OTU_table_anO2_lake_cultures_2000.biom -o OTU_table_anO2_lake_cultures_2000_min17S.biom --min_samples 17
+filter_otus_from_otu_table.py -i OTU_table_anO2_lake_cultures_2000_min17S.biom -o OTU_table_anO2_lake_cultures_2000_min17S.ovr36count.biom -n 36
+biom summarize-table -i OTU_table_anO2_lake_cultures_2000_min17S.ovr36count.biom >summary_anO2_lake_cultures_2000_min17S.ovr36count.txt
+biom summarize-table -i OTU_table_anO2_lake_cultures_2000_min17S.ovr36count.biom --qualitative >summary_anO2_lake_cultures_2000_min17S.ovr36count_qual.txt
+#same
+filter_otus_from_otu_table.py -i OTU_table_anO2_pond_cultures_2000.biom -o OTU_table_anO2_pond_cultures_2000_min11S.biom --min_samples 11
+filter_otus_from_otu_table.py -i OTU_table_anO2_pond_cultures_2000_min11S.biom -o OTU_table_anO2_pond_cultures_2000_min11S.ovr30count.biom -n 30
+biom summarize-table -i OTU_table_anO2_pond_cultures_2000_min11S.ovr30count.biom >summary_anO2_pond_cultures_2000_min11S.ovr30count.txt
+biom summarize-table -i OTU_table_anO2_pond_cultures_2000_min11S.ovr30count.biom --qualitative >summary_anO2_pond_cultures_2000_min11S.ovr30count_qual.txt
+#same ratios for O2 culture
+filter_otus_from_otu_table.py -i OTU_table_O2_lake_cultures_2000.biom -o OTU_table_O2_lake_cultures_2000_min11S.biom --min_samples 11
+filter_otus_from_otu_table.py -i OTU_table_O2_lake_cultures_2000_min11S.biom -o OTU_table_O2_lake_cultures_2000_min11S.ovr30count.biom -n 30
+biom summarize-table -i OTU_table_O2_lake_cultures_2000_min11S.ovr30count.biom >summary_O2_lake_cultures_2000_min11S.ovr30count.txt
+biom summarize-table -i OTU_table_O2_lake_cultures_2000_min11S.ovr30count.biom --qualitative >summary_O2_lake_cultures_2000_min11S.ovr30count_qual.txt
+
+
+## lake samples >50% of samples >= 17.5, 1% in one plus present in 50% of samples = 188
+filter_otus_from_otu_table.py -i OTU_table_TS_lake_17000.biom -o OTU_table_TS_lake_17000_min18S.biom --min_samples 18
+filter_otus_from_otu_table.py -i OTU_table_TS_lake_17000_min18S.biom -o OTU_table_TS_lake_17000_min18S.ovr189count.biom -n 189
+biom summarize-table -i OTU_table_TS_lake_17000_min18S.ovr189count.biom >summary_TS_lake_17000_min18S.ovr189count.txt
+biom summarize-table -i OTU_table_TS_lake_17000_min18S.ovr189count.biom --qualitative >summary_TS_lake_17000_min18S.ovr189count_qual.txt
+
+# cultures have sparcity ~70% while lake sample ~10% will try network at this level
+
+###############################
+## for community composition ##
+#Tried 1% but too extreme, so try 1% in at least one sample
+filter_otus_from_otu_table.py -i OTU_table_anO2_lake_cultures_2000.biom -o OTU_table_anO2_lake_cultures_2000.ovr20count.biom -n 20
+filter_otus_from_otu_table.py -i OTU_table_anO2_pond_cultures_2000.biom -o OTU_table_anO2_pond_cultures_2000.ovr20count.biom -n 20
+filter_otus_from_otu_table.py -i OTU_table_O2_lake_cultures_2000.biom -o OTU_table_O2_lake_cultures_2000.ovr20count.biom -n 20
+filter_otus_from_otu_table.py -i OTU_table_TS_lake_17000.biom -o OTU_table_TS_lake_17000.ovr170count.biom -n 170
+biom summarize-table -i OTU_table_anO2_lake_cultures_2000.ovr20count.biom >summary_anO2_lake_cultures_2000.ovr20count.txt
+biom summarize-table -i OTU_table_anO2_pond_cultures_2000.ovr20count.biom >summary_anO2_pond_cultures_2000.ovr20count.txt
+biom summarize-table -i OTU_table_O2_lake_cultures_2000.ovr20count.biom >summary_O2_lake_cultures_2000.ovr20count.txt
+biom summarize-table -i OTU_table_TS_lake_17000.ovr170count.biom >summary_TS_lake_17000.ovr170count.txt
+
+#good enough to start with for graphing can change later depending on what story people are interested in, or do taxa summary with original subsampled tables
+```
+
 
