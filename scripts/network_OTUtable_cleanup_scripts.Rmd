@@ -1,0 +1,140 @@
+---
+title: "pre-processing_CH4trophy_networks"
+author: "Rhiannon_Mondav"
+date: "1/25/2021"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+## remove Archaea?
+check coverage on SILVA TestPrime : 
+96% of bacterial sequences and 95% of archaeal sequences with SILVA, EMBL-ENA, RDP or 98% and 99% respectively against GTDP and LTP for the same SSU rRNA region. 
+-decision: don't remove
+## remove Eukaryota? Chloroplasts?
+Eukaryote coverage is variable between 11% and 17% of available sequences covering the same region. Coverage of chloroplast regions averages over 93% coverage of available sequences. No direct (non-chloroplast) eukaryote sequences were recovered with amplicons. Mitochondrial sequences?
+-decision: don't remove chloroplast
+
+https://www.arb-silva.de/search/testprime/
+Klindworth, A., Pruesse, E., Schweer, T., Peplies, J., Quast, C., Horn, M. and Glöckner, F.O. (2012) Evaluation of general 16S ribosomal RNA gene PCR primers for classical and next-generation sequencing-based diversity studies. Opens external link in new windowNucleic Acids Res. 2013 Jan 1;41(1):e1. doi: 10.1093/nar/gks808
+
+## set up git repository
+```{bash}
+cd /proj/snic2020-16-196/nobackup/CHtrophy_network_nobackup/
+interactive -n 1 -t 02:10:00 -A snic2020-5-529
+module load bioinfo-tools git/2.28.0
+git init
+git clone git@github.com:rmondav/methanotrophy_networks.git
+cd methanotrophy_networks/
+#add to ignore file
+nano .gitignore
+# make directories
+mkdir original_tables
+mkdir scripts
+mkdir processed_tables
+mkdir network_analyses
+mkdir figures
+#copy over original mothur tables
+scp ../cultALL.trim.contigs.good.unique.good.filter.unique.precluster.pick.pick.agc.* ./original_tables/
+# remove write access to tables
+chmod -w original_tables/cultALL.trim*
+#update github
+git status
+git add .gitignore
+git commit -m "update gitignore file"
+git push origin main
+```
+
+
+#remove unknown samples and convert to biom format
+```{bash}
+cd /proj/snic2020-16-196/nobackup/CHtrophy_network_nobackup/
+interactive -n 1 -t 02:10:00 -A snic2020-5-529
+module load bioinfo-tools Mothur/1.25.1 git/2.28.0
+#preprocessing OTU table with mothur#
+https://mothur.org/wiki/mothur_manual/
+
+## change name of file while keeping original as backup copy
+scp original_tables/cultALL.trim.contigs.good.unique.good.filter.unique.precluster.pick.pick.agc.shared processed_tables/methanotrophy_OTU_table.txt
+chmod +w processed_tables/methanotrophy_OTU_table.txt
+## remove unknown samples
+mothur  
+# remove unknown samples
+remove.groups(shared=processed_tables/methanotrophy_OTU_table.txt, groups=AnaerobicPLUSC-JamtlaPLUSC-k1-k145-k49-k97)
+# convert to biom format
+make.biom(shared=processed_tables/methanotrophy_OTU_table.0.03.pick.txt)
+quit()
+#output methanotrophy_OTU_table_wo_uknowns.biom
+```
+
+# separate sample types, remove failed samples and ultra-rare OTUs, then subsample
+```{bash}
+cd /proj/snic2020-16-196/nobackup/CHtrophy_network_nobackup/methanotrophy_networks
+module load bioinfo-tools Qiime/1.9.1 git/2.28.0
+## separate membrane filtrate control samples
+##remove from main dataset
+filter_samples_from_otu_table.py \
+-i processed_tables/methanotrophy_OTU_table.0.03.pick.0.03.biom \
+-o processed_tables/methanotrophy_OTU_table_wo_uknowns.noNTC.biom \
+--sample_id_fp scripts/sample_list.2umfilterable_controls.txt --negate_sample_id_fp
+##only filtrate samples
+filter_samples_from_otu_table.py \
+-i processed_tables/methanotrophy_OTU_table.0.03.pick.0.03.biom \
+-o processed_tables/methanotrophy_OTU_table_filtrate_NTC.biom \
+--sample_id_fp scripts/sample_list.2umfilterable_controls.txt 
+
+## make summaries to find failed samples
+biom summarize-table \
+-i processed_tables/methanotrophy_OTU_table_filtrate_NTC.biom >processed_tables/summary_NTC.txt
+biom summarize-table \
+-i processed_tables/methanotrophy_OTU_table_filtrate_NTC.biom --qualitative >processed_tables/summary_NTC_qual.txt
+biom summarize-table \
+-i processed_tables/methanotrophy_OTU_table_wo_uknowns.noNTC.biom >processed_tables/summary_full_woNTC.txt
+biom summarize-table \
+-i processed_tables/methanotrophy_OTU_table_wo_uknowns.noNTC.biom --qualitative >processed_tables/summary_full_woNTC_qual.txt
+
+## remove samples with less than 500 count as failed samples
+filter_samples_from_otu_table.py \
+-i processed_tables/methanotrophy_OTU_table_wo_uknowns.noNTC.biom \
+-o processed_tables/methanotrophy_OTU_table_wo_uknowns.noNTC.ovr500count.biom \
+--min_count 500
+
+## remove ultra-rare = zero count and singleton OTUs
+filter_otus_from_otu_table.py \
+-i processed_tables/methanotrophy_OTU_table_wo_uknowns.noNTC.ovr500count.biom \
+-o processed_tables/methanotrophy_OTU_table_wo_uknowns.noNTC.ovr500count_no_singletons.biom -n 2
+#filtrate remove singltns
+filter_otus_from_otu_table.py \
+-i processed_tables/methanotrophy_OTU_table_filtrate_NTC.biom \
+-o processed_tables/methanotrophy_OTU_table_filtrate_NTC_no_singletons.biom -n 2 
+
+## separate the four 'treatments' for data cleanup
+filter_samples_from_otu_table.py \
+-i processed_tables/methanotrophy_OTU_table_wo_uknowns.noNTC.ovr500count_no_singletons.biom \
+-o processed_tables/OTU_table_anO2_lake_cultures.biom \
+--sample_id_fp scripts/sample_list.anO2_lake_cultures.txt --negate_sample_id_fp
+
+filter_samples_from_otu_table.py \
+-i processed_tables/methanotrophy_OTU_table_wo_uknowns.noNTC.ovr500count_no_singletons.biom \
+-o processed_tables/OTU_table_anO2_pond_cultures.biom \
+--sample_id_fp scripts/sample_list.anO2_pond_cultures.txt --negate_sample_id_fp
+
+filter_samples_from_otu_table.py \
+-i processed_tables/methanotrophy_OTU_table_wo_uknowns.noNTC.ovr500count_no_singletons.biom \
+-o processed_tables/OTU_table_O2_lake_cultures.biom \
+--sample_id_fp scripts/sample_list.O2_lake_cultures.txt --negate_sample_id_fp
+
+filter_samples_from_otu_table.py \
+-i processed_tables/methanotrophy_OTU_table_wo_uknowns.noNTC.ovr500count_no_singletons.biom \
+-o processed_tables/OTU_table_TS_lake.biom \
+--sample_id_fp scripts/sample_list.TS_lake_actual.txt --negate_sample_id_fp
+
+# update git
+git status
+git add ./scripts/ #(etc)
+git commit -m "add sample lists"
+git push origin main
+
