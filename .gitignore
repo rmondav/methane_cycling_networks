@@ -3,6 +3,9 @@ original_tables/
 processed_tables/
 taxonomy_summary/
 
+## slurm files
+scripts/slurm*
+
 ## mothur files
 cultALL.trim.contigs.good.unique.good.filter.unique.precluster.pick.pick.agc.*
 mothur.*.logfile
