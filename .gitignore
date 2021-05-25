@@ -5,6 +5,7 @@ taxonomy_summary/
 
 ## slurm files
 scripts/slurm*
+slurm*
 
 ## mothur files
 cultALL.trim.contigs.good.unique.good.filter.unique.precluster.pick.pick.agc.*
