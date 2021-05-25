@@ -3,7 +3,7 @@ library(Matrix); library(igraph)
 library(SpiecEasi, lib.loc='/proj/snic2020-16-196/private/') #HPC analyses
 
 ## make list for treatment names
-tn = list("MC_anO2_lake","MC_anO2_pond","MC_O2_lake","TS_lake_2000")
+tn<-c("MC_anO2_lake","MC_anO2_pond","MC_O2_lake","TS_lake_2000")
 ## set up for loop to iterate over list "tn"
 for (tmnt in tn) { 
   #read in files
