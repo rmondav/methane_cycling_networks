@@ -1,6 +1,7 @@
 ## folders
 original_tables/
 processed_tables/
+processed_tables1/
 taxonomy_summary/
 
 ## slurm files
