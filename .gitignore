@@ -3,6 +3,7 @@ original_tables/
 processed_tables/
 processed_tables1/
 taxonomy_summary/
+tax_summ1
 
 ## slurm files
 scripts/slurm*
