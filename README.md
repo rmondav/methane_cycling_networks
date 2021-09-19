@@ -1,9 +1,10 @@
 # methane_cycling_networks
 scripts associated with the preprint manuscript:
 
-and the article:
 
 aim: describe environmental and mixed-culture microbial community correlations to CH4 cycling
+
+
 
 scripts run in the following order:
 ### pre-processing using mothur
