@@ -2,7 +2,7 @@
 
 #SBATCH -A snic2020-5-529
 #SBATCH -J pearsNunion
-#SBATCH -t 00:30:00
+#SBATCH -t 00:40:00
 #SBATCH -p core -n 1
 
 module load bioinfo-tools R/4.0.4 R_packages/4.0.4

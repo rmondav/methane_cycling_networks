@@ -1,15 +1,16 @@
 library(Matrix); library(igraph)
 #library(SpiecEasi) #for local analyses
-library(SpiecEasi, lib.loc='/proj/snic2020-16-196/private/') #HPC analyses
+library(SpiecEasi, lib.loc='/proj/snic2020-16-196/private/')
 
 ## make list for treatment names
 #,"MC_anO2_pond" removed as no edges found
-tn<-c("MC_anO2_lake","MC_O2_lake","TS_lake_2000")
+tn<-c("TS_lake_2000","MC_anO2_lake1","MC_anO2_lake2")
 ## set up for loop to iterate over list "tn"
 for (tmnt in tn) { 
   #read in files
   infile=paste0("processed_tables/",tmnt,"_clean_otus.csv")
-  clean_otus<-read.csv(file =infile, header=T, row.names=1); rm(infile)
+  clean_otus<-read.csv(file =infile, header=T, row.names=1)
+  #rm(infile)
   ## transpose
   clean_otust<-t(clean_otus); #rm(clean_otus)
   ## run sparcc

@@ -1,6 +1,6 @@
 library(dplyr)
 ## make sample list
-tn <-c("MC_anO2_lake","MC_anO2_pond","MC_O2_lake","TS_lake_2000")
+tn <-c("TS_lake_2000","MC_anO2_lake1","MC_anO2_lake2")
 ## set up for loop to iterate over list "tn"
 for (tmnt in tn) {
   ## make variables for the edge files
@@ -41,7 +41,7 @@ for (tmnt in tn) {
                                  "sparcc.corr","sparcc.ppvals"))
   ## reorder for ease of upload to cytoscape
   edge_union <- union.1.2.3_df[,c(4,2,3,1,5,6,7,8)]
-  ## calculate the average of the correlation statistics (es even though the are different!)
+  ## calculate the average of the correlation statistics (yes even though the are different!)
   edge_union$union.corr<-rowMeans(
     edge_union[,c("sparcc.corr","Pcr","spieceasi.weight")], na.rm=TRUE)
   ## save file

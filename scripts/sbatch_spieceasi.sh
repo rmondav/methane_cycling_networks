@@ -10,5 +10,5 @@ maindir="/proj/snic2020-16-196/nobackup/CHtrophy_network_nobackup/methanotrophy_
 cd $maindir/processed_tables/
 Rscript --no-restore --no-save "$maindir/scripts/SPIEC-EASI.R"
 cd ../
-Rscript --no-restore --no-save convert_SE_results2df.R
+Rscript --no-restore --no-save "$maindir/scripts/convert_SE_results2df.R"
 

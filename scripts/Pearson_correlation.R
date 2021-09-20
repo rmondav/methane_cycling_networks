@@ -2,7 +2,7 @@ library(psych)
 library(igraph)
 
 #make list for treatment names
-tn <-c("MC_anO2_lake","MC_anO2_pond","MC_O2_lake","TS_lake_2000")
+tn <-c("TS_lake_2000","MC_anO2_lake1","MC_anO2_lake2")
 ## set up for loop to iterate over list "tn"
 for (tmnt in tn) {
   #read in files

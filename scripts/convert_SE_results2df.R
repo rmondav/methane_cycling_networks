@@ -1,7 +1,7 @@
 library(SpiecEasi, lib.loc='/proj/snic2020-16-196/private/')
 library(phyloseq)
 library(igraph)
-tn = list("MC_anO2_lake","MC_anO2_pond","MC_O2_lake","TS_lake_2000")
+tn = list("MC_anO2_lake1","MC_anO2_pond","MC_anO2_lake2","TS_lake_2000")
 ## set up for loop to iterate over list "tn"
 for (tmnt in tn) {
   infile=paste0("processed_tables/",tmnt,"_clean_otus.csv")
