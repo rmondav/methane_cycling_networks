@@ -88,12 +88,12 @@ module load bioinfo-tools Qiime/1.9.1 git/2.28.0
 filter_samples_from_otu_table.py \
 -i processed_tables/methanotrophy_OTU_table.0.03.pick.0.03.biom \
 -o processed_tables/methanotrophy_OTU_table_wo_others.noNTC.biom \
---sample_id_fp scripts/sample_list.2umfilterable_controls.txt --negate_sample_id_fp
+--sample_id_fp scripts/samplelists/sample_list.2umfilterable_controls.txt --negate_sample_id_fp
 ## collect controls ie filtrate samples
 filter_samples_from_otu_table.py \
 -i processed_tables/methanotrophy_OTU_table.0.03.pick.0.03.biom \
 -o processed_tables/methanotrophy_OTU_table_filtrate_NTC.biom \
---sample_id_fp scripts/sample_list.2umfilterable_controls.txt 
+--sample_id_fp scripts/samplelists/sample_list.2umfilterable_controls.txt 
 
 ## make summaries for sample sequence QC
 biom summarize-table \
@@ -119,27 +119,27 @@ filter_otus_from_otu_table.py \
 -o processed_tables/methanotrophy_OTU_table_filtrate_NTC_no_singletons.biom -n 2 
 
 ## separate the four 'treatments' for data cleanup
-grep "Sjon" scripts/sample_list.anO2_lake_cultures.txt \
->scripts/sample_list.anO2_lake2_cultures.txt
-grep "Anaerobic" scripts/sample_list.anO2_lake_cultures.txt \
->scripts/sample_list.anO2_lake1_cultures.txt
+grep "Sjon" scripts/samplelists/sample_list.anO2_lake_cultures.txt \
+>scripts/samplelists/sample_list.anO2_lake2_cultures.txt
+grep "Anaerobic" scripts/samplelists/sample_list.anO2_lake_cultures.txt \
+>scripts/samplelists/sample_list.anO2_lake1_cultures.txt
 
 filter_samples_from_otu_table.py \
 -i processed_tables/methanotrophy_OTU_table_wo_others.noNTC.ovr100count_no_singletons.biom \
 -o processed_tables/OTU_table_anO2_lake1_cultures.biom \
---sample_id_fp scripts/sample_list.anO2_lake1_cultures.txt
+--sample_id_fp scripts/samplelists/sample_list.anO2_lake1_cultures.txt
 filter_samples_from_otu_table.py \
 -i processed_tables/methanotrophy_OTU_table_wo_others.noNTC.ovr100count_no_singletons.biom \
 -o processed_tables/OTU_table_anO2_lake2_cultures.biom \
---sample_id_fp scripts/sample_list.anO2_lake2_cultures.txt
+--sample_id_fp scripts/samplelists/sample_list.anO2_lake2_cultures.txt
 filter_samples_from_otu_table.py \
 -i processed_tables/methanotrophy_OTU_table_wo_others.noNTC.ovr100count_no_singletons.biom \
 -o processed_tables/OTU_table_anO2_pond_cultures.biom \
---sample_id_fp scripts/sample_list.anO2_pond_cultures.txt
+--sample_id_fp scripts/samplelists/sample_list.anO2_pond_cultures.txt
 filter_samples_from_otu_table.py \
 -i processed_tables/methanotrophy_OTU_table_wo_others.noNTC.ovr100count_no_singletons.biom \
 -o processed_tables/OTU_table_TS_lake.biom \
---sample_id_fp scripts/sample_list.TS_lake_actual.txt
+--sample_id_fp scripts/samplelists/sample_list.TS_lake_actual.txt
 
 ```
 
