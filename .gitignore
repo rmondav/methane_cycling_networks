@@ -4,6 +4,7 @@ processed_tables/
 processed_tables1/
 taxonomy_summary/
 tax_summ1
+rsults1
 
 ## slurm files
 scripts/slurm*
@@ -14,7 +15,7 @@ cultALL.trim.contigs.good.unique.good.filter.unique.precluster.pick.pick.agc.*
 mothur.*.logfile
 
 ## qiime files
-
+summary_*.txt
 
 # R files
 .Rhistory
