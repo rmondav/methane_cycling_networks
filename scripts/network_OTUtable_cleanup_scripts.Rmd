@@ -291,6 +291,15 @@ summarize_taxa.py -i OTU_table_TS_lake_2000.ovr20count.biom -o ../taxonomy_summa
 summarize_taxa.py -i OTU_table_anO2_lake1_cultures_2000.ovr20count.biom -o ../taxonomy_summary/MC_anO2_lake1
 summarize_taxa.py -i OTU_table_anO2_lake2_cultures_2000.ovr20count.biom -o ../taxonomy_summary/MC_anO2_lake2
 
+## make human readable tables just in case needed later
+tn="TS_lake anO2_lake1_cultures anO2_lake2_cultures"
+## set up for loop to iterate over list "tn"
+for tmnt in $tn
+do
+  biom convert \
+  -i OTU_table_"$tmnt"_2000.ovr20count.biom \
+  -o OTU_table_"$tmnt"_2000.ovr20count.w_taxonomy.txt \
+  --to-tsv --header-key taxonomy
+done
+
 ```
-
-
