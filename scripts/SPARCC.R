@@ -3,18 +3,16 @@ library(Matrix); library(igraph)
 library(SpiecEasi, lib.loc='/proj/snic2020-16-196/private/')
 
 ## make list for treatment names
-#,"MC_anO2_pond" removed as no edges found
 tn<-c("TS_lake_2000","MC_anO2_lake1","MC_anO2_lake2")
 ## set up for loop to iterate over list "tn"
 for (tmnt in tn) { 
   #read in files
   infile=paste0("processed_tables/",tmnt,"_clean_otus.csv")
   clean_otus<-read.csv(file =infile, header=T, row.names=1)
-  #rm(infile)
   ## transpose
-  clean_otust<-t(clean_otus); #rm(clean_otus)
+  clean_otust<-t(clean_otus)
   ## run sparcc
-  sparcc.obj <- sparcc(clean_otust); #rm(clean_otust)
+  sparcc.obj <- sparcc(clean_otust)
   ## replace names of OTUs as removed during processing
   rownames(sparcc.obj$Cor) <- colnames(clean_otust)
   colnames(sparcc.obj$Cor) <- colnames(clean_otust)
@@ -41,7 +39,7 @@ for (tmnt in tn) {
   ## remove edges with (arbitrary) correlation weaker than |0.3|
   sparcc_corr.rdcd<-
     subset(sparcc_corr.df, sparcc.corr>0.3 | sparcc.corr<(-0.3))
-  ## remove those with high-ish probability of false positive
+  ## remove those with high-ish probability of being false positives
   sparcc_corr.clean<-subset(sparcc_corr.rdcd, sparcc.ppvals<0.05)
   ## make column with named edges
   sparcc_corr.clean$edge<-
@@ -51,6 +49,6 @@ for (tmnt in tn) {
   ## save file as csv
   outfile=paste0("results/",tmnt,"_sparcc_edges.csv")
   ## save file as csv
-  write.csv(sparcc_edges, file=outfile, quote=F)
+  write.csv(sparcc_edges, file=outfile, quote=F, row.names=F)
 }
 
