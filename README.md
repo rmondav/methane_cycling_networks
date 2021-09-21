@@ -8,7 +8,7 @@ aim: describe environmental and mixed-culture microbial community correlations t
 
 scripts run in the following order:
 ### pre-processing using mothur
-1.
+1. <contributor Gaetan>
 
 ### further processing using biom and qiime
 2. network_OTUtable_cleanup_scripts.Rmd
@@ -19,4 +19,4 @@ scripts run in the following order:
 5. sbatch_pearson_N_makeUnions_process_taxTables.sh
 
 ### plotting graphs
-6. 
+6. <contributor Sarahi>
