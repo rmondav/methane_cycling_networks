@@ -1,7 +1,7 @@
 library(SpiecEasi, lib.loc='/proj/snic2020-16-196/private/')
 library(phyloseq)
 library(igraph)
-tn = list("MC_anO2_lake1","MC_anO2_pond","MC_anO2_lake2","TS_lake_2000")
+tn = list("MC_anO2_lake1","MC_anO2_lake2","TS_lake_2000")
 ## set up for loop to iterate over list "tn"
 for (tmnt in tn) {
   infile=paste0("processed_tables/",tmnt,"_clean_otus.csv")
@@ -23,6 +23,6 @@ for (tmnt in tn) {
   Spieceasi_edges <- Evals_df[,c(4,3,1,2)] 
   ## save file as csv
   outfile=paste0("results/",tmnt,"_Spieceasi_edges.csv")
-  write.csv(Spieceasi_edges,file=outfile,quote=F)
+  write.csv(Spieceasi_edges, file=outfile, quote=F, row.names=F)
 }
 

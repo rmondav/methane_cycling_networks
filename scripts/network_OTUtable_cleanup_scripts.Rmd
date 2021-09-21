@@ -302,4 +302,8 @@ do
   --to-tsv --header-key taxonomy
 done
 
+## convert filtrate biomes also
+biom convert -i OTU_table_filtrate_NTC.600.no_singletons.biom \
+-o OTU_table_filtrate_NTC.600.no_singletons.w_taxonomy.txt \
+--to-tsv --header-key taxonomy 
 ```
