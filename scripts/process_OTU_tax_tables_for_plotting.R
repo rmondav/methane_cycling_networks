@@ -27,7 +27,7 @@ for (tmnt in tn) {
 ## reduce OTU table list that holds taxonomy and metabolic information
 ## to make it easier to work with in making figures etc
 ## read in full OTU table
-full_OTU<-read.csv("results/full_taxonomy_table.csv", header=T, row.names = 1)
+full_OTU<-read.csv("processed_tables/full_taxonomy_table.csv", header=T, row.names = 1)
 ## get list of OTUs in the clean OTU tables
 infile="processed_tables/MC_anO2_lake1_clean_otus.csv"
 clean_otus<-read.csv(file =infile, header=T, row.names=1) 
