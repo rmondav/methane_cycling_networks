@@ -14,9 +14,7 @@ scripts run in the following order:
 2. network_OTUtable_cleanup_scripts.Rmd
 
 ### co-occurance analyses and taxon table clean-up
-3. sbatch_spieceasi.sh
-4. sbatch_SPARCC.sh
-5. sbatch_pearson_N_makeUnions_process_taxTables.sh
+3. sbatch_network_calculations.sh
 
 ### plotting graphs
-6. <contributor Sarahi>
+4. <contributor Sarahi>
