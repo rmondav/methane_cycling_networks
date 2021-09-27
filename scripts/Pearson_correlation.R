@@ -13,6 +13,7 @@ for (tmnt in tn) {
   P<-corr.test(clean_otust, method="pearson", adjust="BH", alpha=0.05, ci=F)
   ## clean
   rm(clean_otus);rm(clean_otust)
+
   ## getting pval and pearsons rho adj as list from matrix
   ## get pearson correlation rho from matrix
   Pcorr<-as.matrix(P$r)
@@ -24,6 +25,7 @@ for (tmnt in tn) {
   Pcorr_df<-get.data.frame(Pcorr.adj)
   ## change column of r from "weight" to "Pcr"
   colnames(Pcorr_df)[colnames(Pcorr_df) == "weight"] <- "Pcr"
+
   ## get pval adj as list from matrix
   Ppval<-as.matrix(P$p)
   ## convert to igraph object
@@ -31,11 +33,9 @@ for (tmnt in tn) {
                             weighted=T,diag=F,add.colnames=NULL)
   ## convert to dataframe
   Ppval_df<-get.data.frame(Ppval.adj)
-  ## weirdly rows with zero correlation (pval=1) are not printed 
-  ## so check data if uneven row numbers and remove from pvals
-  Ppval_df<-Ppval_df[Ppval_df$weight!=1,]
   ## clean
   rm(P); rm(Pcorr); rm(Pcorr.adj);rm(Ppval);rm(Ppval.adj)
+
   ## add pval to correlation dataframe and change column name to "P pval"
   Pcorr_df$Ppval<-Ppval_df$weight
   ## subset to only those with at least weak correlations

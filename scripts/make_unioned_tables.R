@@ -8,9 +8,9 @@ for (tmnt in tn) {
   infile2=paste0("results/",tmnt,"_Pcorr_edges.csv")
   infile3=paste0("results/",tmnt,"_sparcc_edges.csv")
   ## read in files, make rownames from edge list, and remove numbered column
-  if1<-read.csv(infile1,header=T); rownames(if1)<-as.character(if1[,2]); if1[1]<-NULL
-  if2<-read.csv(infile2,header=T); rownames(if2)<-as.character(if2[,2]); if2[1]<-NULL
-  if3<-read.csv(infile3,header=T); rownames(if3)<-as.character(if3[,2]); if3[1]<-NULL
+  if1<-read.csv(infile1,header=T); rownames(if1)<-as.character(if1[,1])
+  if2<-read.csv(infile2,header=T); rownames(if2)<-as.character(if2[,1])
+  if3<-read.csv(infile3,header=T); rownames(if3)<-as.character(if3[,1])
   ## make lists of edges for each analysis
   spcE<-rownames(if1); persE<-rownames(if2); sparccE<-rownames(if3)
   ## get list of first pair intersect
