@@ -40,6 +40,7 @@ for (tmnt in tn) {
   spieceasi<-spiec.easi(otus, method='mb', lambda.min.ratio=0.01, nlambda=50, 
     sel.criterion='stars', pulsar.select=TRUE, pulsar.params=paramargs)
   saveRDS(spieceasi, file=out_RDS)
+
   ## convert rds to csv
   edgevals=symBeta(getOptBeta(spieceasi), mode="maxabs")
   edgevalsm<-as.matrix(edgevals)
