@@ -19,4 +19,5 @@ scripts run in the following order:
 ### plotting graphs
 4. <contributor Sarahi>
 
-  <a href="https://zenodo.org/badge/latestdoi/366622350"><img src="https://zenodo.org/badge/366622350.svg" alt="DOI"></a>
+
+[![DOI](https://zenodo.org/badge/366622350.svg)](https://zenodo.org/badge/latestdoi/366622350)
