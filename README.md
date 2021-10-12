@@ -17,7 +17,7 @@ scripts run in the following order:
 3. sbatch_network_calculations.sh
 
 ### plotting graphs
-4. <contributor Sarahi>
+4. Sarahi.L.Garcia_column_graphs.R
 
 
 [![DOI](https://zenodo.org/badge/366622350.svg)](https://zenodo.org/badge/latestdoi/366622350)
