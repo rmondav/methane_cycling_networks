@@ -22,4 +22,4 @@ scripts run in the following order:
 
 [![DOI](https://zenodo.org/badge/366622350.svg)](https://zenodo.org/badge/latestdoi/366622350)
   
-  ![](https://komarev.com/ghpvc/?username=rmondav&style=flat-square&color=20b2aa&label=counter)
+  ![](https://komarev.com/ghpvc/?username=rmondav&style=flat&color=20b2aa&label=counter)
