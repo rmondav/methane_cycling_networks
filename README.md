@@ -1,8 +1,11 @@
 # methane_cycling_networks
 scripts associated with the preprint manuscript:
+"Biogenic methane cycling is controlled by microbial cohorts"
+doi: https://doi.org/10.1101/2022.01.24.477581
 
 
-aim: describe environmental and mixed-culture microbial community correlations to CH4 cycling
+aim: use environmental and mixed-culture microbial communities correlated to CH4 flux
+to identify previously un-identified members of CH4 cycling consortia
 
 
 
